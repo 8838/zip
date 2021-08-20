@@ -1,0 +1,492 @@
+<head>
+    <meta charset="UTF-8">
+    <title>机器猫</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .whole {
+            width: 800px;
+            margin: 20px auto;
+            /*border: 2px solid yellow;*/
+            background-color: white;
+            position: relative;
+        }
+
+        .head {
+            margin: 0 auto;
+            position: relative;
+            width: 500px;
+            height: 440px;
+            background-color: rgb(0, 183, 231);
+            border-radius: 220px;
+            border: 1px solid red;
+        }
+
+        .eye .left_eye,
+        .eye .right_eye {
+            width: 100px;
+            height: 130px;
+            background-color: white;
+            border: 2px solid black;
+            border-radius: 50px;
+            position: absolute;
+            top: 50px;
+            z-index: 3;
+        }
+
+        .eye .LeyeBall,
+        .eye .ReyeBall {
+            width: 20px;
+            height: 20px;
+            background: black;
+            border-radius: 10px;
+            position: absolute;
+            top: 65px;
+        }
+
+        .eye .left_eye {
+            left: 146px;
+        }
+
+        .eye .right_eye {
+            left: 250px;
+        }
+
+        .eye .LeyeBall {
+            right: 10px;
+        }
+
+        .eye .ReyeBall {
+            left: 10px;
+        }
+
+        .face {
+            position: relative;
+            z-index: 2;
+        }
+
+        .face .feature {
+            width: 400px;
+            height: 320px;
+            border-radius: 160px;
+            position: absolute;
+            top: 100px;
+            left: 50px;
+            background: white;
+        }
+
+        .face .nose {
+            width: 45px;
+            height: 50px;
+            border-radius: 23px;
+            background-color: rgb(207, 51, 24);
+            border: 2px solid black;
+            position: absolute;
+            top: 165px;
+            left: 225px;
+            z-index: 3;
+        }
+
+        .face .Nline {
+            width: 3px;
+            height: 160px;
+            background: black;
+            position: absolute;
+            top: 218px;
+            left: 248px;
+            z-index: 3;
+        }
+
+        .face .mouth {
+            width: 280px;
+            height: 280px;
+            border-bottom: 5px solid black;
+            border-radius: 140px;
+            position: absolute;
+            top: 98px;
+            left: 105px;
+        }
+
+        .face .mustache .MutR_higher {
+            width: 80px;
+            height: 2px;
+            background: black;
+            position: absolute;
+            top: 220px;
+            left: 295px;
+            z-index: 2;
+        }
+
+        .face .mustache .MutR_middle {
+            width: 80px;
+            height: 2px;
+            background: black;
+            position: absolute;
+            top: 240px;
+            left: 295px;
+            z-index: 2;
+        }
+
+        .face .mustache .MutR_lower {
+            width: 80px;
+            height: 2px;
+            background: black;
+            position: absolute;
+            top: 260px;
+            left: 295px;
+            z-index: 2;
+        }
+
+        .face .mustache .MutL_top {
+            width: 80px;
+            height: 2px;
+            background: black;
+            position: absolute;
+            top: 220px;
+            left: 115px;
+            z-index: 2;
+        }
+
+        .face .mustache .MutL_center {
+            width: 80px;
+            height: 2px;
+            background: black;
+            position: absolute;
+            top: 240px;
+            left: 115px;
+            z-index: 2;
+        }
+
+        .face .mustache .MutL_bottom {
+            width: 80px;
+            height: 2px;
+            background: black;
+            position: absolute;
+            top: 260px;
+            left: 115px;
+            z-index: 2;
+        }
+
+        .face .mustache .MutL_bottom,
+        .face .mustache .MutR_higher {
+            transform: rotate(160deg);
+        }
+
+        .face .mustache .MutL_top,
+        .face .mustache .MutR_lower {
+            transform: rotate(200deg);
+        }
+
+        .neck {
+            width: 300px;
+            height: 30px;
+            background-color: rgb(163, 31, 18);
+            border: 2px solid black;
+            border-radius: 15px;
+            position: relative;
+            top: 0px;
+            left: 250px;
+            z-index: 4;
+        }
+
+        .neck .bell {
+            width: 60px;
+            height: 60px;
+            overflow: hidden;
+            border: 2px solid black;
+            border-radius: 60px;
+            background-color: rgb(207, 203, 60);
+            position: absolute;
+            top: 5px;
+            left: 120px;
+        }
+
+        .bell .Bline {
+            width: 60px;
+            height: 2px;
+            background-color: rgb(207, 203, 60);
+            border: 2px solid black;
+            border-radius: 3px 3px 0 0;
+            position: absolute;
+            top: 15px;
+        }
+
+        .bell .Bcircle {
+            width: 20px;
+            height: 16px;
+            background: black;
+            border-radius: 8px;
+            position: absolute;
+            top: 25px;
+            left: 20px;
+        }
+
+        .bell .Bunderpart {
+            width: 3px;
+            height: 20px;
+            background-color: black;
+            position: absolute;
+            left: 28px;
+            top: 40px;
+        }
+
+        .body {
+            position: relative;
+            top: -300px;
+            z-index: 1;
+        }
+
+        .body .tummy {
+            width: 280px;
+            height: 240px;
+            background-color: rgb(0, 177, 225);
+            border: 2px solid black;
+            position: absolute;
+            top: 267px;
+            left: 260px;
+        }
+
+        .body .bellyband {
+            width: 220px;
+            height: 220px;
+            background-color: white;
+            border: 2px solid black;
+            border-radius: 110px;
+            position: absolute;
+            left: 290px;
+            top: 267px;
+        }
+
+        .body .pocket {
+            width: 160px;
+            height: 160px;
+            border-radius: 80px;
+            background-color: white;
+            border: 2px solid black;
+            position: absolute;
+            top: 305px;
+            left: 320px;
+        }
+
+        .cover {
+            width: 164px;
+            height: 80px;
+            background-color: white;
+            border-bottom: 2px solid black;
+            /*border: 5px solid orange;*/
+            position: absolute;
+            top: 300px;
+            left: 320px;
+        }
+
+        .left_hand,
+        .right_hand {
+            height: 100px;
+            width: 100px;
+            position: absolute;
+            top: 272px;
+            left: 248px;
+        }
+
+        .left_hand {
+            left: -10px;
+        }
+
+        .left_hand .Larm {
+            width: 70px;
+            height: 100px;
+            background-color: rgb(0, 190, 232);
+            border: 1px solid black;
+            position: relative;
+            top: 200px;
+            left: 535px;
+            transform: rotateZ(135deg);
+            /*z-index: -1;*/
+        }
+
+        .right_hand {
+            left: -10px;
+        }
+
+        .right_hand .Rarm {
+            width: 70px;
+            height: 100px;
+            background-color: rgb(0, 190, 232);
+            border: 1px solid black;
+            /*z-index: -1;*/
+            position: relative;
+            top: 200px;
+            left: 215px;
+            transform: rotateZ(45deg);
+        }
+
+        .left_hand .Lpalm,
+        .right_hand .Rpalm {
+            width: 80px;
+            height: 80px;
+            border-radius: 40px;
+            border: 2px solid black;
+            background-color: white;
+            position: absolute;
+        }
+
+        .right_hand .Rpalm {
+            left: 580px;
+            top: 260px;
+            z-index: 1;
+        }
+
+        .left_hand .Lpalm {
+            left: 160px;
+            top: 260px;
+            z-index: 1;
+        }
+
+        .foot .left_foot,
+        .foot .right_foot {
+            width: 150px;
+            height: 40px;
+            background-color: white;
+            border: 2px solid black;
+            border-radius: 80px 60px 60px 40px;
+            position: relative;
+        }
+
+        .foot .left_foot {
+            left: 240px;
+            top: 210px;
+        }
+
+        .foot .right_foot {
+            top: 165px;
+            left: 410px;
+        }
+
+        .foot .crotch {
+            width: 40px;
+            height: 20px;
+            background-color: white;
+            border: 2px solid black;
+            border-bottom: none;
+            border-radius: 40px 40px 0 0;
+            position: relative;
+            top: 103px;
+            left: 382px;
+            z-index: 2
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="whole">
+
+            <!-- 头 -->
+            <div class="head">
+
+                <!-- 眼 -->
+                <div class="eye">
+
+                    <!-- 左眼 -->
+                    <div class="left_eye">
+                        <!-- 左眼球 -->
+                        <div class="LeyeBall"></div>
+                    </div>
+
+                    <!-- 右眼 -->
+                    <div class="right_eye">
+                        <!-- 右眼球 -->
+                        <div class="ReyeBall"></div>
+                    </div>
+                </div>
+
+                <!-- 脸 -->
+                <div class="face">
+
+                    <!-- 脸型 -->
+                    <div class="feature"></div>
+
+                    <!-- 鼻 -->
+                    <div class="nose"></div>
+
+                    <!-- 鼻子线 -->
+                    <div class="Nline"></div>
+
+                    <!-- 嘴 -->
+                    <div class="mouth"></div>
+
+                    <!-- 胡子 -->
+                    <div class="mustache">
+                        <div class="MutL_top"></div>
+                        <div class="MutL_center"></div>
+                        <div class="MutL_bottom"></div>
+                        <div class="MutR_higher"></div>
+                        <div class="MutR_middle"></div>
+                        <div class="MutR_lower"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 脖子 -->
+            <div class="neck">
+                <!-- 铃铛 -->
+                <div class="bell">
+                    <div class="Bline"></div>
+                    <div class="Bcircle"></div>
+                    <div class="Bunderpart"></div>
+                </div>
+            </div>
+
+            <!-- 身体 -->
+            <div class="body">
+
+                <!-- 肚子 -->
+                <div class="tummy"></div>
+
+                <!-- 肚兜 -->
+                <div class="bellyband"></div>
+
+                <!-- 口袋 -->
+                <div class="pocket"></div>
+
+                <div class="cover"></div>
+            </div>
+
+            <!-- 左手 -->
+            <div class="left_hand">
+
+                <!-- 手臂 -->
+                <div class="Larm"></div>
+
+                <!-- 手掌 -->
+                <div class="Lpalm"></div>
+            </div>
+
+            <!-- 右手 -->
+            <div class="right_hand">
+
+                <!-- 手臂 -->
+                <div class="Rarm"></div>
+
+                <!-- 手掌 -->
+                <div class="Rpalm"></div>
+            </div>
+
+            <!-- 脚 -->
+            <div class="foot">
+
+                <!-- 左脚 -->
+                <div class="left_foot"></div>
+
+                <!-- 右脚 -->
+                <div class="right_foot"></div>
+
+                <div class="crotch"></div>
+            </div>
+        </div>
+
+    </div>
+</body>
