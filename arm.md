@@ -1,4 +1,4 @@
-![6d35c96106222acd68ef27a4fc725cc4.jpg]([https://img.mjj.today/2022/10/02/6d35c96106222acd68ef27a4fc725cc4.jpg](https://cdn.pixabay.com/photo/2021/01/29/09/30/parliament-5960363_960_720.jpg))
+![6d35c96106222acd68ef27a4fc725cc4.jpg](https://cdn.pixabay.com/photo/2021/01/29/09/30/parliament-5960363_960_720.jpg)
 
 <!-- wp:image {"align":"left","id":3857,"sizeSlug":"large"} -->
 <figure class="wp-block-image alignleft size-large"><img src="https://www.moe.ms/drive/img/2022/07/ARM-logo-1024x383.jpg" alt="" class="wp-image-3857"/></figure>
