@@ -1,0 +1,260 @@
+<!--markdown--><!-- wp:paragraph -->
+<p>建站是一种信仰，即使每天1ip，那也必须要有一个属于自己的博客。但是每天vps挂着没啥流量的博客着实浪费。装个v2ray与博客共存，而且v2ray利用网站进行伪装，两全其美！</p>
+<!-- /wp:paragraph -->
+
+
+<!--more-->
+
+
+<!-- wp:paragraph -->
+<p>为什么推荐这一配置，它产生的流量就是通过网站发出的，GFW是分不清的，所以比较稳。我自己用这个配置2年没有被封过一次。</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:table -->
+<figure class="wp-block-table"><table><tbody><tr><td>2022/09/15</td><td>v2ray最近发布了5.0的源代码，导致下方安装脚本出现了路径问题无法启动，现将脚本更新为只拉取4.45.2版本v2ray</td></tr><tr><td>2022/02/16</td><td>更新Windows客户端V2rayN配置教程</td></tr><tr><td>2022/01/13</td><td>v2最近强制启用了VMessAEAD，之前搭建的用户需要去宝塔config.json里找到"alterId": 64，把64改为0，然后vps重启一下v2。<strong><span class="has-inline-color has-vivid-red-color">小火箭</span></strong>需要在客户端“额外ID”填入0，<strong><span class="has-inline-color has-vivid-red-color">Windows</span></strong>和<strong><span class="has-inline-color has-vivid-red-color">安卓</span></strong>需要下载最新的客户端(下方链接已更新)</td></tr><tr><td>2021/11/25</td><td>宝塔国际版aapanel也适用，只是页面是英文，步骤是一模一样</td></tr><tr><td>2021/10/03</td><td>更新安卓与Windows客户端配置教程</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:heading -->
+<h2>准备工作：</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>准备一个域名和一台vps，并将域名解析到vps。<a rel="noreferrer noopener" href="https://freenom.com" target="_blank">Freenom</a> 可以注册免费域名</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>搭建好<a href="https://bt.cn" target="_blank" rel="noreferrer noopener">宝塔</a>并安装nginx</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>宝塔和nginx完成以后，回到vps SSH窗口</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>执行命令</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>bash &lt;(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh) --version v4.45.2</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>执行完后，回到宝塔面板，</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>左侧文件，依次打开，如下图所示</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:image {"id":2251,"sizeSlug":"large"} -->
+<figure class="wp-block-image size-large"><img src="https://www.moe.ms/drive/img/2021/08/1D502A91-00A7-4CA7-8468-3D1EF9FEA646-1024x683.jpeg" alt="" class="wp-image-2251"/></figure>
+<!-- /wp:image -->
+
+<!-- wp:paragraph -->
+<p>编辑config.json这个文件，打开文件后先清空里面的内容，再粘贴下面代码进去并保存</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>{
+  "inbounds": &#91;
+    {
+      "port": 10000,
+      "listen":"127.0.0.1",
+      "protocol": "vmess",
+      "settings": {
+        "clients": &#91;
+          {
+            "id": "000fe881-b655-4212-b804-b00f9970d5aa",
+            "alterId": 0
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "ws",
+        "wsSettings": {
+        "path": "/happy"
+        }
+      }
+    }
+  ],
+  "outbounds": &#91;
+    {
+      "protocol": "freedom",
+      "settings": {}
+    }
+  ]
+}</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>代码中的000fe881-b655-4212-b804-b00f9970d5aa可以变更一下。比如换几个数字。相当于是个密码。但是<span class="has-inline-color has-vivid-red-color"><strong>格式必须相同</strong></span>(小火箭里的UUID指的就是这串代码)</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>然后宝塔新建一个网站(域名是文章开头你解析的)，如下图所示（数据库，PHP都无所谓）</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:image {"id":2250,"sizeSlug":"large"} -->
+<figure class="wp-block-image size-large"><img src="https://www.moe.ms/drive/img/2021/08/0E7F1DCA-7CB6-40E0-8398-26CF9BD7FFA9-1024x923.jpeg" alt="" class="wp-image-2250"/></figure>
+<!-- /wp:image -->
+
+<!-- wp:paragraph -->
+<p>首先申请SSL证书(这步不用说了吧)</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>然后点击<span class="has-inline-color has-vivid-red-color"><strong>配置文件</strong></span>，在配置文件<span class="has-inline-color has-vivid-red-color"><strong>最顶部</strong></span>添加以下代码</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code># 定义变量
+map $http_upgrade $connection_upgrade {
+  default upgrade;
+  ''      close;
+}</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:image {"id":2254,"sizeSlug":"large"} -->
+<figure class="wp-block-image size-large"><img src="https://www.moe.ms/drive/img/2021/08/3F072473-1423-4702-94AC-C4F4BAEA6E37-1024x928.jpeg" alt="" class="wp-image-2254"/></figure>
+<!-- /wp:image -->
+
+<!-- wp:paragraph -->
+<p>然后大概这个位置(如下图)添加以下代码</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>#v2配置文件
+location /happy {
+proxy_pass       http://127.0.0.1:10000;
+proxy_redirect             off;
+proxy_http_version         1.1;
+proxy_set_header Upgrade   $http_upgrade;
+proxy_set_header Connection "upgrade";
+proxy_set_header Host      $http_host;
+}
+</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:image {"id":2257,"sizeSlug":"large"} -->
+<figure class="wp-block-image size-large"><img src="https://www.moe.ms/drive/img/2021/08/6F2B1973-C2DF-496A-A87E-646987631DEB-1024x910.jpeg" alt="" class="wp-image-2257"/></figure>
+<!-- /wp:image -->
+
+<!-- wp:paragraph -->
+<p>保存</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>回到vps SSH窗口</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>启动v2ray</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>systemctl start v2ray</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>设置开机自启</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>systemctl enable v2ray</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:heading -->
+<h2>OK，V2ray服务端已全部完成</h2>
+<!-- /wp:heading -->
+
+<!-- wp:heading -->
+<h2>下面说ios小火箭配置：</h2>
+<!-- /wp:heading -->
+
+<!-- wp:gallery {"ids":[3419,3420],"linkTo":"file"} -->
+<figure class="wp-block-gallery columns-2 is-cropped"><ul class="blocks-gallery-grid"><li class="blocks-gallery-item"><figure><a href="https://www.moe.ms/drive/img/2022/01/75A0C5A2-FE35-47B7-A362-DB89128AE887.jpeg"><img src="https://www.moe.ms/drive/img/2022/01/75A0C5A2-FE35-47B7-A362-DB89128AE887-593x1024.jpeg" alt="" data-id="3419" data-full-url="https://www.moe.ms/drive/img/2022/01/75A0C5A2-FE35-47B7-A362-DB89128AE887.jpeg" data-link="https://www.moe.ms/75a0c5a2-fe35-47b7-a362-db89128ae887" class="wp-image-3419"/></a></figure></li><li class="blocks-gallery-item"><figure><a href="https://www.moe.ms/drive/img/2022/01/FEA2A900-CFC5-4AC8-9241-67827402FAD4.jpeg"><img src="https://www.moe.ms/drive/img/2022/01/FEA2A900-CFC5-4AC8-9241-67827402FAD4-591x1024.jpeg" alt="" data-id="3420" data-full-url="https://www.moe.ms/drive/img/2022/01/FEA2A900-CFC5-4AC8-9241-67827402FAD4.jpeg" data-link="https://www.moe.ms/fea2a900-cfc5-4ac8-9241-67827402fad4" class="wp-image-3420"/></a></figure></li></ul></figure>
+<!-- /wp:gallery -->
+
+<!-- wp:paragraph -->
+<p>安卓客户端V2rayNG：<a href="https://daima.eu.org/usr/uploads/2022/08/4015299693.zip">v2rayNG.apk</a> 解压密码:5201314</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2>安卓V2rayNG配置：</h2>
+<!-- /wp:heading -->
+
+<!-- wp:gallery {"ids":[2456,2457,2458],"linkTo":"file"} -->
+<figure class="wp-block-gallery columns-3 is-cropped"><ul class="blocks-gallery-grid"><li class="blocks-gallery-item"><figure><a href="https://www.moe.ms/drive/img/2021/09/IMG_20210911_190659.jpg"><img src="https://www.moe.ms/drive/img/2021/09/IMG_20210911_190659-536x1024.jpg" alt="" data-id="2456" data-full-url="https://www.moe.ms/drive/img/2021/09/IMG_20210911_190659.jpg" data-link="https://www.moe.ms/2241.html/img_20210911_190659" class="wp-image-2456"/></a></figure></li><li class="blocks-gallery-item"><figure><a href="https://www.moe.ms/drive/img/2021/09/IMG_20210911_191118.jpg"><img src="https://www.moe.ms/drive/img/2021/09/IMG_20210911_191118-536x1024.jpg" alt="" data-id="2457" data-full-url="https://www.moe.ms/drive/img/2021/09/IMG_20210911_191118.jpg" data-link="https://www.moe.ms/2241.html/img_20210911_191118" class="wp-image-2457"/></a></figure></li><li class="blocks-gallery-item"><figure><a href="https://www.moe.ms/drive/img/2021/09/IMG_20210911_190936.jpg"><img src="https://www.moe.ms/drive/img/2021/09/IMG_20210911_190936-534x1024.jpg" alt="" data-id="2458" data-full-url="https://www.moe.ms/drive/img/2021/09/IMG_20210911_190936.jpg" data-link="https://www.moe.ms/2241.html/img_20210911_190936" class="wp-image-2458"/></a></figure></li></ul></figure>
+<!-- /wp:gallery -->
+
+<!-- wp:paragraph -->
+<p>Windows客户端V2rayN：<a href="https://daima.eu.org/usr/uploads/2022/08/2344390579.zip">v2rayN.zip</a> 解压密码:5201314</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2>Windows V2rayN配置：</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>解压运行V2rayN文件夹里的V2rayN.exe，提示未安装.NET Framework的话去<a rel="noreferrer noopener" href="https://docs.microsoft.com/zh-cn/dotnet/framework/install/guide-for-developers#installation-choices" target="_blank">Microsoft</a>官网下载.NET Framework<span class="has-inline-color has-vivid-red-color"><strong>4.8</strong></span>以上的版本安装好再重新运行V2rayN</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>V2rayN左上角点击服务器，添加<span class="has-inline-color has-vivid-red-color"><strong>Vmess协议</strong></span>，配置就按照上面安卓的照葫芦画瓢</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:gallery {"ids":[2472,2473,2474,3474],"linkTo":"file"} -->
+<figure class="wp-block-gallery columns-3 is-cropped"><ul class="blocks-gallery-grid"><li class="blocks-gallery-item"><figure><a href="https://www.moe.ms/drive/img/2021/09/3F40AC50-E127-45CF-A665-EEED34605398.jpeg"><img src="https://www.moe.ms/drive/img/2021/09/3F40AC50-E127-45CF-A665-EEED34605398-1024x576.jpeg" alt="" data-id="2472" data-full-url="https://www.moe.ms/drive/img/2021/09/3F40AC50-E127-45CF-A665-EEED34605398.jpeg" data-link="https://www.moe.ms/3f40ac50-e127-45cf-a665-eeed34605398" class="wp-image-2472"/></a></figure></li><li class="blocks-gallery-item"><figure><a href="https://www.moe.ms/drive/img/2021/09/48D79548-6205-4688-934E-18C3FA9467D7.jpeg"><img src="https://www.moe.ms/drive/img/2021/09/48D79548-6205-4688-934E-18C3FA9467D7-1024x576.jpeg" alt="" data-id="2473" data-full-url="https://www.moe.ms/drive/img/2021/09/48D79548-6205-4688-934E-18C3FA9467D7.jpeg" data-link="https://www.moe.ms/48d79548-6205-4688-934e-18c3fa9467d7" class="wp-image-2473"/></a></figure></li><li class="blocks-gallery-item"><figure><a href="https://www.moe.ms/drive/img/2021/09/441818AD-6AF4-4AE9-9182-3C0F69BE1536.jpeg"><img src="https://www.moe.ms/drive/img/2021/09/441818AD-6AF4-4AE9-9182-3C0F69BE1536-1024x576.jpeg" alt="" data-id="2474" data-full-url="https://www.moe.ms/drive/img/2021/09/441818AD-6AF4-4AE9-9182-3C0F69BE1536.jpeg" data-link="https://www.moe.ms/441818ad-6af4-4ae9-9182-3c0f69be1536" class="wp-image-2474"/></a></figure></li><li class="blocks-gallery-item"><figure><a href="https://www.moe.ms/drive/img/2021/08/CA700108-B964-4572-AF3C-A61AF328798B.jpeg"><img src="https://www.moe.ms/drive/img/2021/08/CA700108-B964-4572-AF3C-A61AF328798B-1024x576.jpeg" alt="" data-id="3474" data-full-url="https://www.moe.ms/drive/img/2021/08/CA700108-B964-4572-AF3C-A61AF328798B.jpeg" data-link="https://www.moe.ms/2241.html/ca700108-b964-4572-af3c-a61af328798b" class="wp-image-3474"/></a></figure></li></ul></figure>
+<!-- /wp:gallery -->
+
+<!-- wp:heading -->
+<h2>v2ray其他常用命令</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>## 启动<br>systemctl start v2ray</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>## 停止<br>systemctl stop v2ray</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>## 重启<br>systemctl restart v2ray</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>## 开机自启<br>systemctl enable v2ray</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading -->
+<h2>##卸载v2ray</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>先停止v2ray</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>systemctl stop v2ray</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>systemctl disable v2ray</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>再执行一键移除</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:code -->
+<pre class="wp-block-code"><code>bash &lt;(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh) --remove</code></pre>
+<!-- /wp:code -->
+
+<!-- wp:paragraph -->
+<p>补充：域名在<a rel="noreferrer noopener" href="https://www.cloudflare.com/zh-cn/" target="_blank">cloudflare</a>管理的话可直接点亮云朵这样你所有流量都会走cf，GFW就更是拿你没办法，只有污染域名。一般小站没什么ZZ内容GFW还没那个闲工夫污染域名。所以套了cf的话那简直是稳如狗，想被Q都Q不了。但是众所周知cf速度堪忧。非特殊情况下不用套cf。特殊时期可以套套cf。简直完美！</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>另外被Q的ip通过点亮cloudflare的云朵，也可以<strong><span class="has-inline-color has-vivid-red-color">复活</span></strong>。换句话说，即使这台vps被Q了，依然可以用它来扶Q</p>
+<!-- /wp:paragraph -->
