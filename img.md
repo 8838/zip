@@ -1,1 +1,2 @@
-[](http://328888.xyz/img/i.jpg)
+i
+![](http://328888.xyz/img/i.jpg)
