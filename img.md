@@ -1,2 +1,3 @@
 i
-![](http://328888.xyz/img/i.jpg)
+
+![ifG28.png](https://i.328888.xyz/2022/11/30/ifG28.png)
