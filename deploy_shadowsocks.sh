@@ -41,7 +41,7 @@ cat > /etc/shadowsocks-libev/config.json <<EOF
     "server_port":9001,
     "password":"8838.github.io",
     "timeout":300,
-    "method":"xchacha20-ietf-poly1305",
+    "method":"chacha20-ietf-poly1305",
     "fast_open":false,
     "nameserver":"1.1.1.1",
     "mode":"tcp_and_udp"
@@ -60,7 +60,7 @@ if [ "$(docker ps -q -f name=ss-libev)" ]; then
     echo "服务器IP: $(curl -s https://ipinfo.io/ip)"
     echo "端口: 9001"
     echo "密码: 8838.github.io"
-    echo "加密方式: xchacha20-ietf-poly1305"
+    echo "加密方式: chacha20-ietf-poly1305"
 else
     echo "==== 安装失败 ===="
     echo "Shadowsocks容器未能正常启动，请检查日志"
